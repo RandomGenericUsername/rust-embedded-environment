@@ -1,0 +1,3 @@
+pyYAML==6.0.1
+remarshal==0.18.0
+cmsis-svd==0.4

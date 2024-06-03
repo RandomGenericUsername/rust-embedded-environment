@@ -1,0 +1,19 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=827846 to learn about workspace recommendations.
+	// Extension identifier format: ${publisher}.${name}. Example: vscode.csharp
+
+	// List of extensions which should be recommended for users of this workspace.
+	"recommendations": [
+		"marus25.cortex-debug",   // GDB debugger for Cortex-M microcontrollers
+		"vadimcn.vscode-lldb",   // CodeLLDB: LLDB extension for powerful debugging
+		"rust-lang.rust-analyzer", // Rust Analyzer for advanced Rust language support
+		"tamasfe.even-better-toml", // Even Better TOML for enhanced TOML file support
+		"serayuzgur.crates", // Crates for dependency management in Cargo.toml
+		"usernamehw.errorlens" // Error Lens for inline error and warning display
+	],
+	
+	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
+	"unwantedRecommendations": [
+		
+	]
+}

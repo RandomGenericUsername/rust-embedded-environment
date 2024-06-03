@@ -1,0 +1,84 @@
+{
+    "type": "object",
+    "definitions": {
+        "core": {"type": "string"},
+        "arch": {"type": "string"},
+        "openocd_cfg": {
+            "type": "object",
+            "properties": {
+                "interface": {"type": "string"},
+                "target": {"type": "string"}
+            },
+            "required": ["interface", "target"]
+        },
+        "extra_memory_section" : {
+            "type": "object",
+            "properties": {
+                "memory_type": {"type": "string"},
+                "origin": {"type": ["string", "integer"]},
+                "length": {"type": ["string", "integer"]}
+            },
+            "required": ["memory_type", "origin", "length"]
+        },
+        "memory_section" : {
+            "type" : "object",
+            "properties" : {
+                "origin": {"type": ["string", "integer"]},
+                "length": {"type": ["string", "integer"]}
+            },
+            "required": ["origin", "length"]
+
+        },
+        "memory": {
+            "type": "object",
+            "properties": {
+                "flash": {"$ref": "#/definitions/memory_section"},
+                "ram": {"$ref": "#/definitions/memory_section"},
+                "extra_sections": {"type": "array", "items": {"$ref": "#/definitions/extra_memory_section"}}
+            },
+            "required": ["flash", "ram"]
+        },
+        "extra_directories" : {
+            "type" : "array",
+            "items" : {"type" : "string"}
+        },
+        "svd_file" : {
+            "type" : "string"
+        },
+        "target": {
+            "type": "string"
+        },
+        "debug_configuration": {
+            "type": "string"
+        },
+        "core_config": {
+            "type": "object",
+            "properties": {
+                "core": {"$ref": "#/definitions/core"},
+                "architecture": {"$ref": "#/definitions/arch"},
+                "memory": {"$ref": "#/definitions/memory"},
+                "openocd" : { "$ref" : "#/definitions/openocd_cfg" },
+                "directories" : { "$ref" : "#/definitions/extra_directories" },
+                "svd_file" : { "$ref" : "#/definitions/svd_file" }
+            },
+            "required": ["core", "architecture", "memory", "openocd"],
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "target": {"$ref": "#/definitions/target"},
+        "debug_configuration": {"$ref": "#/definitions/debug_configuration"},
+
+        "architecture": {"$ref": "#/definitions/arch"},
+        "openocd" : { "$ref" : "#/definitions/openocd_cfg" },
+
+        "directories" : { "$ref" : "#/definitions/extra_directories" },
+
+        "config": {
+            "type": "array",
+            "items": {"$ref": "#/definitions/core_config"}
+        }
+    },
+    "required": ["target", "config"],
+    "additionalProperties": false
+}

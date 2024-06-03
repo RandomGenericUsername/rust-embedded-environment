@@ -1,0 +1,23 @@
+[template]
+cargo_generate_version = ">=0.19.0" 
+ignore = []
+
+[placeholders]
+target = { type = "string", prompt = "MCU target" }
+debug_configuration = { type = "string", prompt = "Debugger configuration", choices = [ "arm-none-eabi-gdb", "gdb-multiarch", "gdb" ], default = "gdb-multiarch"}
+
+core_0 = { type = "string", prompt = "Core 0 label" }
+architecture_0 = { type = "string", prompt = "Core 0 architecture", default = "thumbv7em-none-eabi" }
+openocd_interface_0 = {type = "string", prompt = "Openocd core 0 target configuration.", default = "stm32h7x_dual_bank.cfg"}
+openocd_target_0 = {type = "string", prompt = "Select the openocd interface configuration for core 0 -> Defaults to 'stlink.cfg'", choices = [
+        "stlink.cfg",
+        "stlink-v1.cfg",
+        "stlink-v2.cfg",
+        "stlink-v2-1.cfg",
+        "stlink-dap.cfg"
+    ], default = "stlink.cfg" }
+flash_origin_0 = { type = "string", prompt = "core 0 flash memory origin" }
+flash_length_0 = { type = "string", prompt = "core 0 flash memory length" }
+ram_origin_0 = { type = "string", prompt = "core 0 ram memory origin" }
+ram_length_0 = { type = "string", prompt = "core 0 ram memory length" }
+svd_file_0 = { type = "string", prompt = "SVD path for core 0" }

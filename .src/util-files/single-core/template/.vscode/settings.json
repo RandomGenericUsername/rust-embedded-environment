@@ -1,0 +1,9 @@
+{
+    "cortex-debug.gdbPath": "/usr/bin/gdb-multiarch",
+    "rust-analyzer.checkOnSave.command": "cargo check --target {{ architecture_0 }}",
+    "rust-analyzer.cargo.target": "{{ architecture_0 }}",
+    "rust-analyzer.runnableEnv": {
+        "RUN": "cargo run --target {{ architecture_0 }}",
+        //"DEBUG": "openocd."
+    }
+}

@@ -1,0 +1,30 @@
+target: Nucleo-WL55JC 
+config:
+  - core: cortex-m4
+    architecture: thumbv7em-none-eabi
+    memory:
+      flash:
+        origin: "0x08000000"
+        length: "1024K"
+      ram:
+        origin: "0x20000000"
+        length: "128K"
+      extra_sections:
+        - memory_type: ITCMRAM 
+          origin: "0x00000000"
+          length: "64K"
+    openocd:
+      interface: stlink.cfg
+      target: stm32h7x_dual_bank.cfg
+  - core: cortex-m4
+    architecture: thumbv7em-none-eabi
+    memory:
+      flash:
+        origin: "0x08100000"
+        length: "1024K"
+      ram:
+        origin: "0x10000000"
+        length: "288K"
+    openocd:
+      interface: stlink.cfg
+      target: stm32f4x.cfg

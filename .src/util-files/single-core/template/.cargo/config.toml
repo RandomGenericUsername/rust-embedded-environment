@@ -1,0 +1,11 @@
+# Build configurations
+[build]
+target = "{{ architecture_0 }}"
+target-dir = "./target/"
+panic = 'unwind'
+
+[target.{{ architecture_0 }}]
+#rustflags = [
+#  "-C", "link-arg=-Tlink.x",
+#]
+

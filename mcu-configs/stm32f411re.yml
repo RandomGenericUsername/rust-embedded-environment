@@ -1,0 +1,18 @@
+target: Nucleo-F411RE 
+config:
+  - core: cortex-m4
+    architecture: thumbv7em-none-eabi
+    memory:
+      flash:
+        origin: "0x8000000"
+        length: "512K"
+      ram:
+        origin: "0x20000000"
+        length: "128K"
+      extra_sections:
+        - memory_type: itcm_ram_0
+          origin: "0x00000000"
+          length: "64K"
+    openocd:
+      interface: stlink.cfg
+      target: stm32f4x.cfg

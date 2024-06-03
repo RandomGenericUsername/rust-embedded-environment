@@ -1,0 +1,151 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558 
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build {{ core_0 }} (debug)",
+            "type": "process",
+            "command": "cargo",
+            "args": ["make", "build-{{ core_0 }}"],
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Build {{ core_1 }} (debug)",
+            "type": "process",
+            "command": "cargo",
+            "args": ["make", "build-{{ core_1 }}"],
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Build all (Debug)",
+            "type": "shell",
+            "command": "cargo",
+            "args": ["make", "build"],
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": "build",
+        },
+        {
+            "label": "Build {{ core_0 }} (Release)",
+            "type": "process",
+            "command": "cargo",
+            "args": ["make", "build-{{ core_0 }}-release"],
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Build {{ core_1 }} (Release)",
+            "type": "process",
+            "command": "cargo",
+            "args": ["make", "build-{{ core_1 }}-release"],
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Build all (Release)",
+            "type": "shell",
+            "command": "cargo",
+            "args": ["make", "build-release"],
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": "build",
+        },
+        {
+            "label": "Debug {{ core_0 }}",
+            "type": "process",
+            "command": "cargo",
+            "args": ["make", "debug-{{ core_0 }}"],
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Flash {{ core_0 }}",
+            "type": "process",
+            "command": "cargo",
+            "args": ["make", "flash-{{ core_0 }}"],
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Debug {{ core_1 }}",
+            "type": "process",
+            "command": "cargo",
+            "args": ["make", "debug-{{ core_1 }}"],
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Flash {{ core_1 }}",
+            "type": "process",
+            "command": "cargo",
+            "args": ["make", "flash-{{ core_1 }}"],
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Flash all",
+            "type": "shell",
+            "command": "cargo",
+            "args": ["make", "flash"],
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": "build",
+        },
+        {
+            "label": "Clean all",
+            "type": "shell",
+            "command": "cargo",
+            "args": ["make", "clean"],
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": "build",
+        },
+    ]
+}

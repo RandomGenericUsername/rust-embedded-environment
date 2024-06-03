@@ -1,0 +1,86 @@
+# ============================= Format {{ core_1 }} ============================= #
+[tasks.format]
+description = "Format {{ core_1 }}"
+command = "cargo"
+args = ["fmt", "--", "--emit=files"]
+# ========================================================================================= #
+
+# ============================= Check {{ core_1 }} ============================= #
+[tasks.check]
+description = "Check {{ core_1 }}"
+command = "cargo"
+args = ["check"]
+# ========================================================================================= #
+
+# ============================= Clean {{ core_1 }} ============================= #
+[tasks.clean]
+description = "Clean {{ core_1 }}"
+command = "cargo"
+args = ["clean"]
+# ========================================================================================= #
+
+# ============================= Build {{ core_1 }} ============================= #
+[tasks.build]
+description = "Build {{ core_1 }}"
+command = "cargo"
+args = ["build"]
+dependencies = ["clean"]
+# ========================================================================================= #
+
+# ============================= Build {{ core_1 }} (release version) ============================= #
+[tasks.build-release]
+description = "Build {{ core_1 }} (release version)"
+command = "cargo"
+args = ["build", "--release"]
+dependencies = ["clean"]
+# ========================================================================================= #
+
+# ============================= Flash {{ core_1 }} (debug version) ============================= #
+[tasks.flash]
+description = "Flash (debug version)"
+script = [
+    '''
+    openocd -f openocd.cfg -c "program ../target/{{ core_1 }}/{{ architecture_1 }}/debug/{{ core_1 }} verify reset exit"
+    '''
+]
+dependencies = ["build"]
+# ========================================================================================= #
+
+# ============================= Flash {{ core_1 }} (release version) ============================= #
+[tasks.flash-release]
+description = "Flash (release version)"
+script = [
+    '''
+    openocd -f openocd.cfg -c "program ../target/{{ core_1 }}/{{ architecture_1 }}/release/{{ core_1 }} verify reset exit"
+    '''
+]
+dependencies = ["build-release"]
+# ========================================================================================= #
+ 
+# ============================= Debug {{ core_1 }} ============================= #
+[tasks.debug]
+workspace = false
+description = "Debug {{ core_1 }}"
+script = [
+    "openocd &",
+    "OPENOCD_PID=$!",
+    "sleep 2",
+    "{{ debug_configuration }} ../target/{{ core_1 }}/{{ architecture_1 }}/debug/{{ core_1 }} -x openocd.gdb",
+    "kill $OPENOCD_PID"
+]
+dependencies = ["flash"]
+# ========================================================================================= #
+
+# ============================= Run {{ core_1 }} ============================= # 
+[tasks.run]
+workspace = false
+description = "Run {{ core_1 }}"
+script = [
+    "openocd &",
+    "OPENOCD_PID=$!",
+    "sleep 2",
+    "{{ debug_configuration }} ../target/{{ core_1 }}/{{ architecture_1 }}/release/{{ core_1 }} -x openocd.gdb",
+    "kill $OPENOCD_PID"
+]
+dependencies = ["flash-release"]
+# ========================================================================================= #

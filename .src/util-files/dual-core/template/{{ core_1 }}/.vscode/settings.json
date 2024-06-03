@@ -1,0 +1,6 @@
+{
+    "cortex-debug.gdbPath": "/usr/bin/gdb-multiarch",
+    "rust-analyzer.check.allTargets": false,
+    "rust-analyzer.cargo.target": "{{ architecture_1 }}"
+
+}

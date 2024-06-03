@@ -1,0 +1,33 @@
+### Workspaces
+[workspace]
+members = [ 
+    "{{ core_0 }}",
+    "{{ core_1 }}",
+    "shared/greeter", 
+]
+default-members = ["{{ core_0 }}"]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+authors = ["{{ authors }}"]
+description = "Dual core project for {{ target }}"
+
+
+[workspace.dependencies]
+cortex-m = "0.6.0"
+cortex-m-rt = "0.6.10"
+panic-halt = "0.2.0"
+cortex-m-semihosting = "0.3.3" 
+rtt-target = "0.5.0"
+greeter = { path = "shared/greeter", version = "*" }
+
+### Debug build config
+[profile.dev]
+opt-level = 0  # No optimizations, full debug info
+
+### Release build config
+[profile.release]
+codegen-units = 1 # better optimizations
+debug = true # symbols are nice and they don't increase the size on Flash
+lto = true # better optimizations

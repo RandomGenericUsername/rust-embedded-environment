@@ -1,0 +1,235 @@
+# ///////////////////////////// [GLOBAL RULES] //////////////////////////////////////////// #
+# ============================= Format workspace ============================= #
+[tasks.format]
+description = "Format the workspace"
+command = "cargo"
+args = ["fmt", "--", "--emit=files"]
+# ========================================================================================= #
+# ============================= Check workspace ============================= #
+[tasks.check]
+description = "Check the workspace"
+command = "cargo"
+args = ["check"]
+# ========================================================================================= #
+# ============================= Clean workspace ============================= #
+[tasks.clean]
+description = "Clean the workspace"
+command = "cargo"
+args = ["clean"]
+# ========================================================================================= #
+# ============================= Build workspace (debug) ============================= #
+[tasks.build]
+description = "Build the workspace (debug)"
+command = "cargo"
+args = ["build"]
+dependencies = ["clean"]
+# ========================================================================================= #
+# ============================= Build workspace (release) ============================= #
+[tasks.build-release]
+description = "Build the workspace (release)"
+command = "cargo"
+args = ["build", "--release"]
+dependencies = ["clean"]
+# ========================================================================================= #
+# ============================= Rule for flashing (debug mode) ============================= #
+# Lacks implementation for flashing the workspace in debug mode
+# ========================================================================================= #
+# ============================= Rule for flashing (release mode) ============================= #
+# Lacks implementation for flashing the workspace in release mode
+# ========================================================================================= #
+# ============================= Rule for running the workspace ============================= #
+# Lacks implementation for running the workspace
+# ========================================================================================= #
+# ============================= Rule for debugging the workspace ============================= #
+# Lacks implementation for debugging the workspace
+# ========================================================================================= #   
+# ///////////////////////////////////////////////////////////////////////////////////////// #
+
+
+# ///////////////////////////// [{{ core_0 }} RULES] //////////////////////////////////////////// #
+# ============================= Format {{ core_0 }} ============================= #
+[tasks.format-{{ core_0 }}]
+description = "Format the {{ core_0 }} core"
+script = '''
+cargo fmt --package {{ core_0 }} -- --emit=files
+'''
+workspace = false
+# ========================================================================================= #   
+# ============================= Check {{ core_0 }} ============================= #
+[tasks.check-{{ core_0 }}]
+description = "Check the {{ core_0 }} core"
+script = '''
+cargo check -p {{ core_0 }} --target {{ architecture_0 }} --target-dir target/{{ core_0 }}
+'''
+workspace = false
+# ========================================================================================= #
+# ============================= Clean {{ core_0 }} ============================= #
+[tasks.clean-{{ core_0 }}]
+description = "Clean the {{ core_0 }} core"
+script = '''
+cargo clean --target-dir target/{{ core_0 }}
+'''
+workspace = false
+# ========================================================================================= #   
+# ============================= Build {{ core_0 }} ============================= #
+[tasks.build-{{ core_0 }}]
+description = "Build the {{ core_0 }} core"
+script = '''
+cargo build -p {{ core_0 }} --target {{ architecture_0 }} --bin {{ core_0 }} --target-dir target/{{ core_0 }} 
+'''
+dependencies = ["clean-{{ core_0 }}"]
+workspace = false
+# ========================================================================================= #   
+# ============================= Build {{ core_0 }} (release version) ============================= #
+[tasks.build-{{ core_0 }}-release]
+description = "Build the {{ core_0 }} core (release version)"
+script = '''
+cargo build -p {{ core_0 }} --target {{ architecture_0 }} --bin {{ core_0 }} --target-dir target/{{ core_0 }} --release
+'''
+dependencies = ["clean-{{ core_0 }}"]
+workspace = false
+# ========================================================================================= #
+# ============================= Flash {{ core_0 }} (debug version) ============================= #
+[tasks.flash-{{ core_0 }}]
+description = "Flash the {{ core_0 }} core (debug version)"
+script = '''
+openocd -f {{ core_0}}/openocd.cfg -c "program target/{{ core_0 }}/{{ architecture_0 }}/debug/{{ core_0 }} verify reset exit"
+''' 
+dependencies = ["build-{{ core_0 }}"]
+workspace = false
+# ========================================================================================= #
+# ============================= Flash {{ core_0 }} (release version) ============================= #
+[tasks.flash-{{ core_0 }}-release]
+description = "Flash the {{ core_0 }} core (release version)"
+script = '''
+openocd -f {{ core_0 }}/openocd.cfg -c "program target/{{ core_0 }}/{{ architecture_0 }}/release/{{ core_0 }} verify reset exit"
+'''
+dependencies = ["build-{{ core_0 }}-release"]
+workspace = false
+# ========================================================================================= #
+# ============================= Debug {{ core_0 }} ============================= #
+[tasks.debug-{{ core_0 }}]
+description = "Debug the {{ core_0 }} core"
+script = [
+    "openocd -f {{ core_0 }}/openocd.cfg &",
+    "OPENOCD_PID=$!",
+    "sleep 2",
+    "{{ debug_configuration }} target/{{ core_0 }}/{{ architecture_0 }}/debug/{{ core_0 }} -x {{ core_0 }}/openocd.gdb",
+    "kill $OPENOCD_PID"
+]
+dependencies = ["flash-{{ core_0 }}"]
+workspace = false
+# ========================================================================================= #
+# ============================= Run {{ core_0 }} ============================= #
+[tasks.run-{{ core_0 }}]
+description = "Run the {{ core_0 }} core"
+script = [
+    "openocd -f {{ core_0 }}/openocd.cfg  &",
+    "OPENOCD_PID=$!",
+    "sleep 2",
+    "{{ debug_configuration }} target/{{ core_0 }}/{{ architecture_0 }}/release/{{ core_0 }} -x {{ core_0 }}/openocd.gdb",
+    "kill $OPENOCD_PID"
+]
+dependencies = ["flash-{{ core_0 }}-release"]
+workspace = false
+# ========================================================================================= #
+# ///////////////////////////////////////////////////////////////////////////////////////// #   
+
+
+# ///////////////////////////// [{{ core_1 }} RULES] //////////////////////////////////////////// #
+# ============================= Format {{ core_1 }} ============================= #
+[tasks.format-{{ core_1 }}]
+description = "Format the {{ core_1 }} core"
+script = '''
+cargo fmt --package {{ core_1 }} -- --emit=files
+'''
+workspace = false
+# ========================================================================================= #   
+# ============================= Check {{ core_1 }} ============================= #
+[tasks.check-{{ core_1 }}]
+description = "Check the {{ core_1 }} core"
+script = '''
+cargo check -p {{ core_1 }} --target {{ architecture_1 }} --target-dir target/{{ core_1 }}
+'''
+workspace = false
+# ========================================================================================= #
+# ============================= Clean {{ core_1 }} ============================= #
+[tasks.clean-{{ core_1 }}]
+description = "Clean the {{ core_1 }} core"
+script = '''
+cargo clean --target-dir target/{{ core_1 }}
+'''
+workspace = false
+# ========================================================================================= #   
+# ============================= Build {{ core_1 }} ============================= #
+[tasks.build-{{ core_1 }}]
+description = "Build the {{ core_1 }} core"
+script = '''
+cargo build -p {{ core_1 }} --target {{ architecture_1 }} --bin {{ core_1 }} --target-dir target/{{ core_1 }} 
+'''
+dependencies = ["clean-{{ core_1 }}"]
+workspace = false
+# ========================================================================================= #   
+# ============================= Build {{ core_1 }} (release version) ============================= #
+[tasks.build-{{ core_1 }}-release]
+description = "Build the {{ core_1 }} core (release version)"
+script = '''
+cargo build -p {{ core_1 }} --target {{ architecture_1 }} --bin {{ core_1 }} --target-dir target/{{ core_1 }} --release
+'''
+dependencies = ["clean-{{ core_1 }}"]
+workspace = false
+# ========================================================================================= #
+# ============================= Flash {{ core_1 }} (debug version) ============================= #
+[tasks.flash-{{ core_1 }}]
+description = "Flash the {{ core_1 }} core (debug version)"
+script = '''
+openocd -f {{ core_1}}/openocd.cfg -c "program target/{{ core_1 }}/{{ architecture_1 }}/debug/{{ core_1 }} verify reset exit"
+''' 
+dependencies = ["build-{{ core_1 }}"]
+workspace = false
+# ========================================================================================= #
+# ============================= Flash {{ core_1 }} (release version) ============================= #
+[tasks.flash-{{ core_1 }}-release]
+description = "Flash the {{ core_1 }} core (release version)"
+script = '''
+openocd -f {{ core_1 }}/openocd.cfg -c "program target/{{ core_1 }}/{{ architecture_1 }}/release/{{ core_1 }} verify reset exit"
+'''
+dependencies = ["build-{{ core_1 }}-release"]
+workspace = false
+# ========================================================================================= #
+# ============================= Debug {{ core_1 }} ============================= #
+[tasks.debug-{{ core_1 }}]
+description = "Debug the {{ core_1 }} core"
+script = [
+    "openocd -f {{ core_1 }}/openocd.cfg  &",
+    "OPENOCD_PID=$!",
+    "sleep 2",
+    "{{ debug_configuration }} target/{{ core_1 }}/{{ architecture_1 }}/debug/{{ core_1 }} -x {{ core_1 }}/openocd.gdb",
+    "kill $OPENOCD_PID"
+]
+dependencies = ["flash-{{ core_1 }}"]
+workspace = false
+# ========================================================================================= #
+# ============================= Run {{ core_1 }} ============================= #
+[tasks.run-{{ core_1 }}]
+description = "Run the {{ core_1 }} core"
+script = [
+    "openocd -f {{ core_1 }}/openocd.cfg &",
+    "OPENOCD_PID=$!",
+    "sleep 2",
+    "{{ debug_configuration }} target/{{ core_1 }}/{{ architecture_1 }}/release/{{ core_1 }} -x {{ core_1 }}/openocd.gdb",
+    "kill $OPENOCD_PID"
+]
+dependencies = ["flash-{{ core_1 }}-release"]
+workspace = false
+# ========================================================================================= #
+# ///////////////////////////////////////////////////////////////////////////////////////// #   
+
+
+
+
+
+
+
+
+
