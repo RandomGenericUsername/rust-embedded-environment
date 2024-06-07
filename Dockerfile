@@ -129,6 +129,7 @@ RUN /usr/local/bin/add_rust_targets.sh ${TARGETS}
 RUN ln -s /commands/utils/create-project/create_project.sh /usr/local/bin/create_project
 # Set up the entrypoint script
 ENTRYPOINT ["/commands/entrypoint.sh"]
+CMD [ "" ]
 ## [ =============================================================== ]
 
 

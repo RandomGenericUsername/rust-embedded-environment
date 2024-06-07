@@ -5,11 +5,12 @@
 show_help() {
     # Use basename to strip the directory path and show only the script name
     local script_name=$(basename "$0")
+    echo "Usage: $script_name <command> [args]"
     echo "Available commands:"
     for cmd in "${!commands[@]}"; do
-        echo "  $cmd"
+        echo " · $cmd [args]"
     done
-    echo "Usage: $script_name [command]"
+    echo "Run without any arguments to start an interactive shell or use one of the commands above."
 }
 
 
@@ -23,23 +24,33 @@ declare -A commands
 commands=(
     [compile]=$COMPILE_PROJECT # compile a project
     [create-project]=$CREATE_PROJECT # create a new project
-    [/bin/bash]="/bin/bash" # Note: This is a special case to run a shell inside the containe
 )
 
-# Check if a command is provided and is in the list of recognized commands
-if [[ -z "$1" ]] || [[ -z "${commands[$1]}" ]]; then
-    # If no command is provided or it's not recognized, show help
-    echo "Unknown or missing command: $1"
-    show_help
-    exit 1
-else
+
+# Check if a command is provided and if it's in the list of recognized commands
+if [[ -z "$1" ]]; then
+    # No command provided
+    if [[ -t 0 ]]; then
+        # Terminal is attached, start an interactive shell without showing help
+        exec /bin/bash
+    else
+        # No terminal attached, show help
+        show_help
+        exit 1
+    fi
+elif [[ -n "${commands[$1]}" ]]; then
     # Extract the command
     command="$1"
     script_path="${commands[$command]}"
-    
+
     # Remove the command from the arguments list
     shift
-    
+
     # Execute the corresponding script with the remaining arguments
     exec "$script_path" "$@"
+else
+    # Command not recognized, show help
+    echo "Unknown command: $1"
+    show_help
+    exit 1
 fi
