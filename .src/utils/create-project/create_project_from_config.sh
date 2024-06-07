@@ -49,10 +49,8 @@ function set_chip_name_in_flattened_config() {
     local mcu="$2"
     local chip_name=$($GET_CHIP_NAME_FOR_EMBED_TOML -m "$mcu" -s "- _" -n 4 -e 1)
     if [[ -z "$chip_name" ]]; then
-        #echo "Error: No matching chip found for MCU: $mcu"
         return 1
     fi  
-    #echo "Chip name is $chip_name"
     echo "chip_configuration = \"$chip_name\"" >> $flattened_config_file
 }
 
@@ -81,7 +79,7 @@ initialize_project() {
     cargo generate --destination "$destination_dir" \
                    --name "$project_name" \
                    --path "$template_path" \
-                   --template-values-file "$FLATTENED_CONFIG_TEMP" \
+                   --template-values-file "$FLATTENED_CONFIG_TEMP"
 }
 
 
