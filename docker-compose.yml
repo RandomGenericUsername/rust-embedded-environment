@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  rust-env:
+    image: rust-env-arch:0.1.0
+    build:
+      dockerfile: Dockerfile
+      context: ./
+      args:
+        TARGETS: "thumbv7em-none-eabihf thumbv7m-none-eabi"

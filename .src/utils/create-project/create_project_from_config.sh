@@ -63,10 +63,6 @@ is_dual_core() {
 flatten_config() {
     local config_file="$1"
     $FLATTEN_YAML -p "$config_file" -o "$FLATTENED_CONFIG_TEMP" -i "$IGNORE_SECTIONS_CONFIG_FILE" -f "toml" || { echo "Configuration flattening failed..."; exit 1; }
-    # Add "[values]" at the beginning of the file
-    write_at_beginning_of_file "$FLATTENED_CONFIG_TEMP" "[values]"
-    set_chip_name_in_flattened_config "$FLATTENED_CONFIG_TEMP" "$(yq e '.target' "$config_file" -o json)"
-
 }
 
 
@@ -82,13 +78,10 @@ initialize_project() {
         local template_path="$PROJECT_CREATOR_SINGLE_CORE_TEMPLATE"
     fi
 
-    echo "Config file: "
-    cat $config_file
     cargo generate --destination "$destination_dir" \
                    --name "$project_name" \
                    --path "$template_path" \
                    --template-values-file "$FLATTENED_CONFIG_TEMP" \
-                   --verbose
 }
 
 
@@ -156,8 +149,16 @@ function create_project_from_config() {
     add_debug_configuration "$config_file" "$DEFAULT_DEBUG_CONFIGURATION"
     # flatten the config file
     flatten_config "$config_file"
+    # Add "[values]" at the beginning of the file
+    write_at_beginning_of_file "$FLATTENED_CONFIG_TEMP" "[values]"
+    # Set the chip name according to probe-rs chip list
+    set_chip_name_in_flattened_config "$FLATTENED_CONFIG_TEMP" "$(yq e '.target' "$config_file" -o json)"
+    # Create the project structure using cargo generate
     initialize_project "$project_path" "$config_file"
+    # Add extra memory sections if defined any in the config file
+    # Add also targets for the architectures defined in the config file
     add_targets_and_memory_sections "$config_file" "$project_path"
+    # Clean up the temporal files
     cleanup_temp_files
 }   
 
