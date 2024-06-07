@@ -1,7 +1,7 @@
 target: Nucleo-F411RE 
 config:
   - core: cortex-m4
-    architecture: thumbv7em-none-eabi
+    architecture: thumbv7em-none-eabihf
     memory:
       flash:
         origin: "0x8000000"

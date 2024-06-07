@@ -1,7 +1,7 @@
 target: Nucleo-H755ZI-Q 
 config:
   - core: cortex-m7
-    architecture: thumbv7em-none-eabi
+    architecture: thumbv7em-none-eabihf
     memory:
       flash:
         origin: "0x08000000"
@@ -17,7 +17,7 @@ config:
       interface: stlink.cfg
       target: stm32h7x_dual_bank.cfg
   - core: cortex-m4
-    architecture: thumbv7em-none-eabi
+    architecture: thumbv7em-none-eabihf
     memory:
       flash:
         origin: "0x08100000"
