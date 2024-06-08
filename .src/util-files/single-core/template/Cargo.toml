@@ -9,10 +9,9 @@ build = "build.rs"
 [dependencies]
 cortex-m = "0.6.0"
 cortex-m-rt = "0.6.10"
-panic-halt = "0.2.0"
 cortex-m-semihosting = "0.3.3" # un-comment to enable semihosting
 rtt-target = "0.5.0"
-greeter = { path = "shared/greeter", version = "*" }
+panic-halt = "0.2.0"
 
 
 ### {{ core_0 }} bin config

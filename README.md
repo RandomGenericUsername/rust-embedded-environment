@@ -26,4 +26,3 @@ Follow these steps to set up the Docker environment:
       git clone https://github.com/RandomGenericUsername/rust-embedded-environment
       cd rust-embedded-environment
    ```
-

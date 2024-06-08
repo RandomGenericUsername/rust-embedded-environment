@@ -2,8 +2,7 @@
 [workspace]
 members = [ 
     "{{ core_0 }}",
-    "{{ core_1 }}",
-    "shared/greeter", 
+    "{{ core_1 }}"
 ]
 default-members = ["{{ core_0 }}"]
 resolver = "2"
@@ -17,10 +16,9 @@ description = "Dual core project for {{ target }}"
 [workspace.dependencies]
 cortex-m = "0.6.0"
 cortex-m-rt = "0.6.10"
-panic-halt = "0.2.0"
 cortex-m-semihosting = "0.3.3" 
+panic-halt = "0.2.0"
 rtt-target = "0.5.0"
-greeter = { path = "shared/greeter", version = "*" }
 
 ### Debug build config
 [profile.dev]
