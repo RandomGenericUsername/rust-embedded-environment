@@ -25,7 +25,6 @@ MODIFY_MEMORY_X="/commands/utils/create-project/modify_memory_x.sh"
 
 VALIDATE_CONFIG_SCHEMA="/commands/utils/validate-mcu-config-schema/validate_yaml.sh"
 CONFIG_SCHEMA="/opt/validation-schema/mcu_config_schema.json"
-GET_CHIP_NAME_FOR_EMBED_TOML="/commands/utils/create-project/get_chip_name_for_embed_toml.sh"
 
 
 # Function to check if a file exists
@@ -42,16 +41,6 @@ function write_at_beginning_of_file() {
     echo "" >> $temp_file_path
     cat $file_path >> $temp_file_path
     mv $temp_file_path $file_path
-}
-
-function set_chip_name_in_flattened_config() {
-    local flattened_config_file="$1"
-    local mcu="$2"
-    local chip_name=$($GET_CHIP_NAME_FOR_EMBED_TOML -m "$mcu" -s "- _" -n 4 -e 1)
-    if [[ -z "$chip_name" ]]; then
-        return 1
-    fi  
-    echo "chip_configuration = \"$chip_name\"" >> $flattened_config_file
 }
 
 is_dual_core() {
@@ -149,8 +138,6 @@ function create_project_from_config() {
     flatten_config "$config_file"
     # Add "[values]" at the beginning of the file
     write_at_beginning_of_file "$FLATTENED_CONFIG_TEMP" "[values]"
-    # Set the chip name according to probe-rs chip list
-    set_chip_name_in_flattened_config "$FLATTENED_CONFIG_TEMP" "$(yq e '.target' "$config_file" -o json)"
     # Create the project structure using cargo generate
     initialize_project "$project_path" "$config_file"
     # Add extra memory sections if defined any in the config file

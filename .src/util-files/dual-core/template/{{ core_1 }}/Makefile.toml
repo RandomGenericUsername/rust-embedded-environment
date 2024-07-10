@@ -1,3 +1,5 @@
+[config]
+skip_core_tasks = true
 # ============================= Format {{ core_1 }} ============================= #
 [tasks.format]
 description = "Format {{ core_1 }}"
@@ -22,16 +24,20 @@ args = ["clean"]
 # ============================= Build {{ core_1 }} ============================= #
 [tasks.build]
 description = "Build {{ core_1 }}"
-command = "cargo"
-args = ["build"]
+script = [
+    "cargo build",
+    "/commands/utils/build_size/build_size.sh ../target/{{ core_1 }}/{{ architecture_0 }}/debug/{{ core_0 }}"
+]
 dependencies = ["clean"]
 # ========================================================================================= #
 
 # ============================= Build {{ core_1 }} (release version) ============================= #
 [tasks.build-release]
-description = "Build {{ core_1 }} (release version)"
-command = "cargo"
-args = ["build", "--release"]
+description = "Build {{ core_1 }} and print the binary size"
+script = [
+    "cargo build --release",
+    "/commands/utils/build_size/build_size.sh ../target/{{ core_1 }}/{{ architecture_0 }}/release/{{ core_0 }}"
+]
 dependencies = ["clean"]
 # ========================================================================================= #
 

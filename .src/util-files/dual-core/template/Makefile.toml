@@ -1,3 +1,5 @@
+[config]
+skip_core_tasks = true
 # ///////////////////////////// [GLOBAL RULES] //////////////////////////////////////////// #
 # ============================= Format workspace ============================= #
 [tasks.format]
@@ -20,16 +22,23 @@ args = ["clean"]
 # ============================= Build workspace (debug) ============================= #
 [tasks.build]
 description = "Build the workspace (debug)"
-command = "cargo"
-args = ["build"]
+script = [
+"cargo make build-{{ core_0 }}", 
+"cargo make build-{{ core_1 }}"
+]
 dependencies = ["clean"]
+workspace = false
+
 # ========================================================================================= #
 # ============================= Build workspace (release) ============================= #
 [tasks.build-release]
 description = "Build the workspace (release)"
-command = "cargo"
-args = ["build", "--release"]
+script = [
+"cargo make build-{{ core_0 }}-release",
+"cargo make build-{{ core_1 }}-release"
+]
 dependencies = ["clean"]
+workspace = false
 # ========================================================================================= #
 # ============================= Rule for flashing (debug mode) ============================= #
 # Lacks implementation for flashing the workspace in debug mode
@@ -74,18 +83,20 @@ workspace = false
 # ============================= Build {{ core_0 }} ============================= #
 [tasks.build-{{ core_0 }}]
 description = "Build the {{ core_0 }} core"
-script = '''
-cargo build -p {{ core_0 }} --target {{ architecture_0 }} --bin {{ core_0 }} --target-dir target/{{ core_0 }} 
-'''
+script = [
+"cargo build -p {{ core_0 }} --target {{ architecture_0 }} --bin {{ core_0 }} --target-dir target/{{ core_0 }}",
+"/commands/utils/build_size/build_size.sh target/{{ core_0 }}/{{ architecture_0 }}/debug/{{ core_0 }}"
+]
 dependencies = ["clean-{{ core_0 }}"]
 workspace = false
 # ========================================================================================= #   
 # ============================= Build {{ core_0 }} (release version) ============================= #
 [tasks.build-{{ core_0 }}-release]
-description = "Build the {{ core_0 }} core (release version)"
-script = '''
-cargo build -p {{ core_0 }} --target {{ architecture_0 }} --bin {{ core_0 }} --target-dir target/{{ core_0 }} --release
-'''
+description = "Build the {{ core_0 }} core"
+script = [
+"cargo build -p {{ core_0 }} --target {{ architecture_0 }} --bin {{ core_0 }} --target-dir target/{{ core_0 }} --release",
+"/commands/utils/build_size/build_size.sh target/{{ core_0 }}/{{ architecture_0 }}/release/{{ core_0 }}"
+]
 dependencies = ["clean-{{ core_0 }}"]
 workspace = false
 # ========================================================================================= #
@@ -127,10 +138,10 @@ script = [
     "openocd -f {{ core_0 }}/openocd.cfg  &",
     "OPENOCD_PID=$!",
     "sleep 2",
-    "{{ debug_configuration }} target/{{ core_0 }}/{{ architecture_0 }}/release/{{ core_0 }} -x {{ core_0 }}/openocd.gdb",
+    "{{ debug_configuration }} target/{{ core_0 }}/{{ architecture_0 }}/debug/{{ core_0 }} -x {{ core_0 }}/openocd.gdb",
     "kill $OPENOCD_PID"
 ]
-dependencies = ["flash-{{ core_0 }}-release"]
+dependencies = ["flash-{{ core_0 }}-debug"]
 workspace = false
 # ========================================================================================= #
 # ///////////////////////////////////////////////////////////////////////////////////////// #   
@@ -164,18 +175,20 @@ workspace = false
 # ============================= Build {{ core_1 }} ============================= #
 [tasks.build-{{ core_1 }}]
 description = "Build the {{ core_1 }} core"
-script = '''
-cargo build -p {{ core_1 }} --target {{ architecture_1 }} --bin {{ core_1 }} --target-dir target/{{ core_1 }} 
-'''
+script = [
+"cargo build -p {{ core_1 }} --target {{ architecture_1 }} --bin {{ core_1 }} --target-dir target/{{ core_1 }}",
+"/commands/utils/build_size/build_size.sh target/{{ core_1 }}/{{ architecture_1 }}/debug/{{ core_1 }}"
+]
 dependencies = ["clean-{{ core_1 }}"]
 workspace = false
 # ========================================================================================= #   
 # ============================= Build {{ core_1 }} (release version) ============================= #
 [tasks.build-{{ core_1 }}-release]
-description = "Build the {{ core_1 }} core (release version)"
-script = '''
-cargo build -p {{ core_1 }} --target {{ architecture_1 }} --bin {{ core_1 }} --target-dir target/{{ core_1 }} --release
-'''
+description = "Build the {{ core_1 }} core"
+script = [
+"cargo build -p {{ core_1 }} --target {{ architecture_1 }} --bin {{ core_1 }} --target-dir target/{{ core_1 }} --release",
+"/commands/utils/build_size/build_size.sh target/{{ core_1 }}/{{ architecture_1 }}/release/{{ core_1 }}"
+]
 dependencies = ["clean-{{ core_1 }}"]
 workspace = false
 # ========================================================================================= #
@@ -217,10 +230,10 @@ script = [
     "openocd -f {{ core_1 }}/openocd.cfg &",
     "OPENOCD_PID=$!",
     "sleep 2",
-    "{{ debug_configuration }} target/{{ core_1 }}/{{ architecture_1 }}/release/{{ core_1 }} -x {{ core_1 }}/openocd.gdb",
+    "{{ debug_configuration }} target/{{ core_1 }}/{{ architecture_1 }}/debug/{{ core_1 }} -x {{ core_1 }}/openocd.gdb",
     "kill $OPENOCD_PID"
 ]
-dependencies = ["flash-{{ core_1 }}-release"]
+dependencies = ["flash-{{ core_1 }}-debug"]
 workspace = false
 # ========================================================================================= #
 # ///////////////////////////////////////////////////////////////////////////////////////// #   

@@ -19,6 +19,8 @@ cortex-m-rt = "0.6.10"
 cortex-m-semihosting = "0.3.3" 
 panic-halt = "0.2.0"
 rtt-target = "0.5.0"
+heapless = "0.8.0"
+colored = "2.1.0"
 
 ### Debug build config
 [profile.dev]

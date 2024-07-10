@@ -13,6 +13,9 @@ cortex-m-semihosting.workspace = true #un-comment to enable semihosting
 rtt-target.workspace = true
 panic-halt.workspace = true 
 
+[build-dependencies]
+colored.workspace = true
+
 ### {{ core_1 }} bin config
 [[bin]]
 name = "{{ core_1 }}"

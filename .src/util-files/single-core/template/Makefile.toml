@@ -1,3 +1,5 @@
+[config]
+skip_core_tasks = true
 # ============================= Format {{ core_0 }} ============================= #
 [tasks.format]
 description = "Format {{ core_0 }}"
@@ -21,17 +23,21 @@ args = ["clean"]
 
 # ============================= Build {{ core_0 }} ============================= #
 [tasks.build]
-description = "Build {{ core_0 }}"
-command = "cargo"
-args = ["build"]
+description = "Build {{ core_0 }} and print the binary size"
+script = [
+    "cargo build",
+    "/commands/utils/build_size/build_size.sh target/{{ architecture_0 }}/debug/{{ core_0 }}"
+]
 dependencies = ["clean"]
 # ========================================================================================= #
 
 # ============================= Build {{ core_0 }} (release version) ============================= #
 [tasks.build-release]
-description = "Build {{ core_0 }} (release version)"
-command = "cargo"
-args = ["build", "--release"]
+description = "Build {{ core_0 }} and print the binary size"
+script = [
+    "cargo build --release",
+    "/commands/utils/build_size/build_size.sh target/{{ architecture_0 }}/release/{{ core_0 }}"
+]
 dependencies = ["clean"]
 # ========================================================================================= #
 
@@ -40,7 +46,7 @@ dependencies = ["clean"]
 description = "Flash (debug version)"
 script = [
     '''
-    openocd -f openocd.cfg -c "program target/{{ core_0 }}/{{ architecture_0 }}/debug/{{ core_0 }} verify reset exit"
+    openocd -f openocd.cfg -c "program target/{{ architecture_0 }}/debug/{{ core_0 }} verify reset exit"
     '''
 ]
 dependencies = ["build"]
@@ -51,7 +57,7 @@ dependencies = ["build"]
 description = "Flash (release version)"
 script = [
     '''
-    openocd -f openocd.cfg -c "program target/{{ core_0 }}/{{ architecture_0 }}/release/{{ core_0 }} verify reset exit"
+    openocd -f openocd.cfg -c "program target/{{ architecture_0 }}/release/{{ core_0 }} verify reset exit"
     '''
 ]
 dependencies = ["build-release"]
@@ -65,7 +71,7 @@ script = [
     "openocd &",
     "OPENOCD_PID=$!",
     "sleep 2",
-    "{{ debug_configuration }} target/{{ core_0 }}/{{ architecture_0 }}/debug/{{ core_0 }} -x openocd.gdb",
+    "{{ debug_configuration }} target/{{ architecture_0 }}/debug/{{ core_0 }} -x openocd.gdb",
     "kill $OPENOCD_PID"
 ]
 dependencies = ["flash"]
@@ -79,7 +85,7 @@ script = [
     "openocd &",
     "OPENOCD_PID=$!",
     "sleep 2",
-    "{{ debug_configuration }} target/{{ core_0 }}/{{ architecture_0 }}/release/{{ core_0 }} -x openocd.gdb",
+    "{{ debug_configuration }} target/{{ architecture_0 }}/release/{{ core_0 }} -x openocd.gdb",
     "kill $OPENOCD_PID"
 ]
 dependencies = ["flash-release"]

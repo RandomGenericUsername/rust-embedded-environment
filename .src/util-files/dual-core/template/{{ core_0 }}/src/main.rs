@@ -8,8 +8,6 @@ extern crate cortex_m_rt;
 
 #[cortex_m_rt::entry]
 fn main() -> ! {
-    asm::nop(); // To not have main optimize to abort in release mode, remove when you add code
-    greeter::greet();
 
     loop {
         // your code goes here
